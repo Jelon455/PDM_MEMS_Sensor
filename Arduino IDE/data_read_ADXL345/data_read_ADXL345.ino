@@ -18,7 +18,7 @@ volatile int sampleNumber = 0;
 volatile unsigned long lastTimestamp = 0;
 volatile float gx, gy, gz;
 
-void IRAM_ATTR onTimer() 
+void IRAM_ATTR onTimer(void* arg) 
 {
   portENTER_CRITICAL_ISR(&mux);
   readFlag = true;
@@ -46,7 +46,8 @@ void setup() {
   Wire.endTransmission();
 
   //timer init
-  const esp_timer_create_args_t timer_args = {
+  const esp_timer_create_args_t timer_args = 
+  {
       .callback = &onTimer,
       .name = "sample_timer"};
   esp_timer_create(&timer_args, &timer);
